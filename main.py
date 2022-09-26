@@ -1,4 +1,6 @@
 from scratch import PybI2c
+
+
 class I2cAbstraction:
     def __init__(self, mode, baudrate):
         pass
@@ -32,6 +34,7 @@ class LedController:
     LedIR2 = 12
     LedOp1 = 13
     LedOp2 = 14
+
     def __init__(self, addr):
         self.addr = addr
 
@@ -47,14 +50,14 @@ class LedController:
     def send(self, send, timeout=5000):
         PybI2c.i2c_send(send, self.addr)
 
+
 class LedCell:
     def __init__(self, ledcontroller):
         self.ledcontroller = ledcontroller
+
     def setred(self, value, isTrue):
         if self.isTrue:
             Pin = LedController.LedRed1
         else:
             Pin = LedController.LedRed2
-
-
 
