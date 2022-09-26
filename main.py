@@ -37,16 +37,16 @@ class LedController:
 
 
     def read(self, data, memaddr, addr_size, timeout=5000):
-        PybI2c.read(data, self.addr, memaddr, addr_size)
+        PybI2c.i2c_read(data, self.addr, memaddr, addr_size)
 
     def write(self, data, memaddr, addr_size, timeout=5000):
-        PybI2c.write(data, self.addr, memaddr, addr_size)
+        PybI2c.i2c_write(data, self.addr, memaddr, addr_size)
 
     def recv(self, recv, timeout=5000):
-        PybI2c.recv(recv, self.addr)
+        PybI2c.i2c_recv(recv, self.addr)
 
     def send(self, send, timeout=5000):
-        PybI2c.send(send, self.addr)
+        PybI2c.i2c_send(send, self.addr)
 
 class LedCell(LedController):
     def __init__(self, addr):
