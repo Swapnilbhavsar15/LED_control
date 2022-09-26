@@ -51,6 +51,10 @@ class LedCell:
     def __init__(self, ledcontroller):
         self.ledcontroller = ledcontroller
     def setred(self, value, isTrue):
+        if self.isTrue:
+            Pin = LedController.LedRed1
+        else:
+            Pin = LedController.LedRed2
 
 
 
