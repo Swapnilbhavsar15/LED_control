@@ -1,23 +1,23 @@
-from scratch import PybI2c
 from board import SCL, SDA
 import busio
 from adafruit_pca9685 import PCA9685
+
 
 class I2cAbstraction:
     def __init__(self, mode, baudrate):
         pass
 
     def i2c_read(self, data, addr, memaddr, addr_size, timeout=5000):
-        pass
+        raise NotImplementedError
 
     def i2c_write(self, data, addr, memaddr, addr_size, timeout=5000):
-        pass
+        raise NotImplementedError
 
     def i2c_recv(self, recv, addr=0x00, timeout=5000):
-        pass
+        raise NotImplementedError
 
     def i2c_send(self, send, addr=0x00, timeout=5000):
-        pass
+        raise NotImplementedError
 
 
 class LedController:
@@ -40,19 +40,6 @@ class LedController:
     def __init__(self, addr):
         self.addr = addr
 
-    def read(self, data, memaddr, addr_size, timeout=5000):
-        PybI2c.i2c_read(data, self.addr, memaddr, addr_size)
-
-    def write(self, data, memaddr, addr_size, timeout=5000):
-        PybI2c.i2c_write(data, self.addr, memaddr, addr_size)
-
-    def recv(self, recv, timeout=5000):
-        PybI2c.i2c_recv(recv, self.addr)
-
-    def send(self, send, timeout=5000):
-        PybI2c.i2c_send(send, self.addr)
-
-
 class LedCell:
     def __init__(self, ledcontroller):
         self.ledcontroller = ledcontroller
@@ -66,4 +53,3 @@ class LedCell:
         pca = PCA9685(i2c_bus)
         pca.frequency = 60
         pca.channels[Pin].duty_cycle = 0xffff
-
