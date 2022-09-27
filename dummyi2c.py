@@ -9,10 +9,10 @@ class I2CDummy(I2cAbstraction):
         print(data, addr, memaddr, addr_size)
 
     def i2c_write(self, data, addr, memaddr, addr_size, timeout=5000):
-        print
+        print(data, addr, memaddr, addr_size)
 
     def i2c_recv(self, recv, addr=0x00, timeout=5000):
-        pass
+        print(recv)
 
     def i2c_send(self, send, addr=0x00, timeout=5000):
-        pass
+        print(send)
