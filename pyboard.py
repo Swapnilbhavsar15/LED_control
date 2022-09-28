@@ -1,19 +1,23 @@
-from pyb import I2C
+from machine import I2C
 from ledcontrol import I2cAbstraction
 
 
 class PybI2c(I2cAbstraction):
     def __init__(self):
-        super().__init__(self, mode, baudrate)
+        super.__init__(self, scl, sda, freq)
+        self.i2c = I2C(self.scl, self.sda, self.freq)
 
-    def i2c_read(self, data, addr, memaddr, addr_size, timeout=5000):
-        I2C.mem_read(data, addr, memaddr, timeout=5000, addr_size=8)
+    def scan(self):
+        I2C.scan()
 
-    def i2c_write(self, data, addr, memaddr, addr_size, timeout=5000):
-        I2C.mem_write(data, addr, memaddr, timeout=5000, addr_size=8)
+    def i2c_writeto(self, addr, buf):
+        I2C.writeto(addr, buf)
 
-    def i2c_recv(self, recv, addr=0x00, timeout=5000):
-        I2C.recv(recv, addr=0x00, timeout=5000)
+    def i2c_readfrom(self, addr, nbytes):
+        I2C.readfrom(addr, nbytes)
 
-    def i2c_send(self, send, addr=0x00, timeout=5000):
-        I2C.send(send, addr=0x00, timeout=5000)
+    def i2c_readfrom_mem(self, addr, memaddr, nbytes):
+        I2C.readfrom_mem(addr, memaddr, nbytes)
+
+    def i2c_writeto_mem(self, addr, memaddr, buf):
+        I2C.writeto_mem(addr, memaddr, buf)

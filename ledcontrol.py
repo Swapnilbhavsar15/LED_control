@@ -1,22 +1,22 @@
-import busio
-from adafruit_pca9685 import PCA9685
-
 
 class I2cAbstraction:
-    def __init__(self, mode, baudrate):
+    def __init__(self, scl, sda, freq):
         pass
 
-    def i2c_read(self, data, addr, memaddr, addr_size, timeout=5000):
-        pass
+    def scan(self):
+        raise NotImplementedError
 
-    def i2c_write(self, data, addr, memaddr, addr_size, timeout=5000):
-        pass
+    def i2c_writeto(self, addr, buf):
+        raise NotImplementedError
 
-    def i2c_recv(self, recv, addr=0x00, timeout=5000):
-        pass
+    def i2c_readfrom(self, addr, nbytes):
+        raise NotImplementedError
 
-    def i2c_send(self, send, addr=0x00, timeout=5000):
-        pass
+    def i2c_readfrom_mem(self, addr, memaddr, nbytes):
+        raise NotImplementedError
+
+    def i2c_writeto_mem(self, addr, memaddr, buf):
+        raise NotImplementedError
 
 
 class LedController:
@@ -35,23 +35,17 @@ class LedController:
     LedIR2 = 12
     LedOp1 = 13
     LedOp2 = 14
-    #Pins for I2C communication
-    SCL = 15
-    SDA = 16
 
     def __init__(self, addr):
         self.addr = addr
+
 
 class LedCell:
     def __init__(self, ledcontroller):
         self.ledcontroller = ledcontroller
 
-    def setred(self, value, isTrue):
+    def setred(self, value, isTrue ):
         if self.isTrue:
             Pin = LedController.LedRed1
         else:
             Pin = LedController.LedRed2
-        i2c_bus = busio.I2C(LedController.SCL, LedController.SDA)
-        pca = PCA9685(i2c_bus)
-        pca.frequency = 60
-        pca.channels[Pin].duty_cycle = 0xffff

@@ -5,14 +5,17 @@ class I2CDummy(I2cAbstraction):
     def __init__(self):
         pass
 
-    def i2c_read(self, data, addr, memaddr, addr_size, timeout=5000):
-        print(data, addr, memaddr, addr_size)
+    def scan(self):
+        print("scanned")
 
-    def i2c_write(self, data, addr, memaddr, addr_size, timeout=5000):
-        print(data, addr, memaddr, addr_size)
+    def i2c_writeto(self, addr, buf):
+        print(addr, buf)
 
-    def i2c_recv(self, recv, addr=0x00, timeout=5000):
-        print(recv)
+    def i2c_readfrom(self, addr, nbytes):
+        print(addr, nbytes)
 
-    def i2c_send(self, send, addr=0x00, timeout=5000):
-        print(send)
+    def i2c_readfrom_mem(self, addr, memaddr, nbytes):
+        print(addr, memaddr, nbytes)
+
+    def i2c_writeto_mem(self, addr, memaddr, buf):
+        print(addr, memaddr, buf)
