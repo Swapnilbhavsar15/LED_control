@@ -2,8 +2,8 @@ from ledcontrol import I2cAbstraction
 
 
 class I2CDummy(I2cAbstraction):
-    def __init__(self, scl, sda, freq):
-        super().__init__(self, scl ,sda, freq)
+    def __init__(self):
+        pass
 
     def scan(self):
         print("scanned")
