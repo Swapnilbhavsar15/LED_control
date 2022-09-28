@@ -18,3 +18,4 @@ class I2CDummy(I2cAbstraction):
 
     def i2c_writeto_mem(self, addr, memaddr, buf):
         print("calling i2c_writeto_mem \n \t I2C address:", addr, "register address:", memaddr, "buf:", buf)
+

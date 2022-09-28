@@ -1,5 +1,16 @@
-
-
+class I2cAbstraction:
+    def __init__(self, scl, sda, freq):
+        pass
+    def scan(self):
+        raise NotImplementedError
+    def i2c_writeto(self, addr, buf):
+        raise NotImplementedError
+    def i2c_readfrom(self, addr, nbytes):
+        raise NotImplementedError
+    def i2c_readfrom_mem(self, addr, memaddr, nbytes):
+        raise NotImplementedError
+    def i2c_writeto_mem(self, addr, memaddr, buf: bytes):
+        raise NotImplementedError
 class LedController:
     LedEn = 0
     LedRed1 = 1
