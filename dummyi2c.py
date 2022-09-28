@@ -4,7 +4,6 @@ from ledcontrol import I2cAbstraction
 class I2CDummy(I2cAbstraction):
     def __init__(self):
         pass
-
     def scan(self):
         print("scanned")
 
@@ -18,4 +17,4 @@ class I2CDummy(I2cAbstraction):
         print(addr, memaddr, nbytes)
 
     def i2c_writeto_mem(self, addr, memaddr, buf):
-        print(addr, memaddr, buf)
+        print("calling i2c_writeto_mem \n \t I2C address:", addr, "register address:", memaddr, "buf:", buf)
