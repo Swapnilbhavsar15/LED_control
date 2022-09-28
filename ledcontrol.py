@@ -1,3 +1,5 @@
+import adafruit_pca9685
+import busio
 
 class I2cAbstraction:
     def __init__(self, scl, sda, freq):
@@ -52,6 +54,6 @@ class LedCell:
         else:
             Pin = LedController.LedRed2
         i2c_bus = busio.I2C(LedController.Scl, LedController.Sda)
-        pca = PCA9685(i2c_bus)
+        pca = adafruit_pca9685.PCA9685(i2c_bus)
         pca.frequency = 60
         pca.channels[Pin].duty_cycle = 0xffff
