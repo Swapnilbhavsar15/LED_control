@@ -41,7 +41,6 @@ class LedCell:
 
     def setred(self, value):
         # value: 0-100
-        # value: 0-4095
         if self.is_first_on_led_controller:
             pin = LedController.LedRed1
         else:
@@ -50,7 +49,8 @@ class LedCell:
         if pin == 1:
             register_address = 0x0A
         else:
-            raise NotImplementedError
+            register_address = 0x22
         i2c_address = self.ledcontroller.addr
+        new_val = (value*4095)/100
 
         self.ledcontroller.bus.i2c_writeto_mem(i2c_address, register_address, bytes([1, 2]))
