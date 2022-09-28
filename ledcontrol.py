@@ -35,6 +35,8 @@ class LedController:
     LedIR2 = 12
     LedOp1 = 13
     LedOp2 = 14
+    Scl = 15
+    Sda = 16
 
     def __init__(self, addr):
         self.addr = addr
@@ -44,8 +46,12 @@ class LedCell:
     def __init__(self, ledcontroller):
         self.ledcontroller = ledcontroller
 
-    def setred(self, value, isTrue ):
-        if self.isTrue:
+    def setred(self, value, isTrue):
+        if isTrue:
             Pin = LedController.LedRed1
         else:
             Pin = LedController.LedRed2
+        i2c_bus = busio.I2C(LedController.Scl, LedController.Sda)
+        pca = PCA9685(i2c_bus)
+        pca.frequency = 60
+        pca.channels[Pin].duty_cycle = 0xffff
