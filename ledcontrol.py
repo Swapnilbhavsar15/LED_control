@@ -46,7 +46,7 @@ class LedController:
             prescaleval = round((25000000/(4096*freq))) - 1
         else:
             print("Frequency value not in range")
-        self.bus.i2c_writeto_mem(self.addr, 0xFE, prescaleval.to_bytes(1, 'little'))
+        self.bus.i2c_writeto_mem(self.addr, 0xFE, prescaleval.to_bytes(1, 'big'))
 
 class LedCell:
     def __init__(self, ledcontroller: LedController, is_first_on_led_controller):
