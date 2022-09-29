@@ -39,6 +39,11 @@ class LedCell:
         self.ledcontroller = ledcontroller
         self.is_first_on_led_controller = is_first_on_led_controller
 
+    def setmain(self, register_address, value):
+        i2c_address = self.ledcontroller.addr
+        new_val = int((value * 4095) / 100)
+        self.ledcontroller.bus.i2c_writeto_mem(i2c_address, register_address, bytes(new_val))
+
     def setred(self, value):
         # value: 0-100
         if self.is_first_on_led_controller:
@@ -50,7 +55,4 @@ class LedCell:
             register_address = 0x0A
         else:
             register_address = 0x22
-        i2c_address = self.ledcontroller.addr
-        new_val = (value*4095)/100
-
-        self.ledcontroller.bus.i2c_writeto_mem(i2c_address, register_address, bytes([1, 2]))
+        LedCell.setmain(self,register_address,value)
