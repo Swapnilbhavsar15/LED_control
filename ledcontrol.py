@@ -1,16 +1,23 @@
 class I2cAbstraction:
     def __init__(self, scl, sda, freq):
         pass
+
     def scan(self):
         raise NotImplementedError
+
     def i2c_writeto(self, addr, buf):
         raise NotImplementedError
+
     def i2c_readfrom(self, addr, nbytes):
         raise NotImplementedError
+
     def i2c_readfrom_mem(self, addr, memaddr, nbytes):
         raise NotImplementedError
+
     def i2c_writeto_mem(self, addr, memaddr, buf: bytes):
         raise NotImplementedError
+
+
 class LedController:
     LedEn = 0
     LedRed1 = 1
@@ -29,10 +36,17 @@ class LedController:
     LedOp2 = 14
     Scl = 15
     Sda = 16
+
     def __init__(self, addr, bus: I2cAbstraction):
         self.addr = addr
         self.bus = bus
 
+    def setfreq(self, freq):
+        if (24 <= freq <= 1526):
+            prescaleval = round((25000000/(4096*freq))) - 1
+        else:
+            print("Frequency value not in range")
+        self.bus.i2c_writeto_mem(self.addr, 0xFE, prescaleval.to_bytes(1, 'little'))
 
 class LedCell:
     def __init__(self, ledcontroller: LedController, is_first_on_led_controller):
@@ -41,7 +55,7 @@ class LedCell:
 
     def setmain(self, register_address, value):
         i2c_address = self.ledcontroller.addr
-        new_value = int((value*4095)/100)
+        new_value = int((value * 4095) / 100)
         self.ledcontroller.bus.i2c_writeto_mem(i2c_address, register_address, new_value.to_bytes(2, byteorder='big'))
 
     def setred(self, value):
@@ -55,7 +69,7 @@ class LedCell:
             register_address = 0x0A
         else:
             register_address = 0x22
-        self.setmain(register_address,value)
+        self.setmain(register_address, value)
 
     def setblue(self, value):
         # value: 0-100
@@ -68,7 +82,7 @@ class LedCell:
             register_address = 0x0E
         else:
             register_address = 0x26
-        self.setmain(register_address,value)
+        self.setmain(register_address, value)
 
     def setgreen(self, value):
         # value: 0-100
@@ -81,7 +95,7 @@ class LedCell:
             register_address = 0x12
         else:
             register_address = 0x2A
-        self.setmain(register_address,value)
+        self.setmain(register_address, value)
 
     def setwhite(self, value):
         # value: 0-100
@@ -94,7 +108,7 @@ class LedCell:
             register_address = 0x16
         else:
             register_address = 0x2E
-        self.setmain(register_address,value)
+        self.setmain(register_address, value)
 
     def setUV(self, value):
         # value: 0-100
@@ -107,7 +121,7 @@ class LedCell:
             register_address = 0x1A
         else:
             register_address = 0x32
-        self.setmain(register_address,value)
+        self.setmain(register_address, value)
 
     def setIR(self, value):
         # value: 0-100
@@ -120,4 +134,4 @@ class LedCell:
             register_address = 0x1E
         else:
             register_address = 0x36
-        self.setmain(register_address,value)
+        self.setmain(register_address, value)
