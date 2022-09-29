@@ -49,89 +49,152 @@ class LedController:
         self.bus.i2c_writeto_mem(self.addr, 0xFE, prescaleval.to_bytes(1, 'big'))
 
 class LedCell:
+    addr_dict = { "LED1_ON_L" : 0x0A,
+                  "LED1_ON_H" : 0x0B,
+                  "LED1_OFF_L" : 0x0C,
+                  "LED1_OFF_H" : 0x0D,
+                  "LED2_ON_L" : 0x0E,
+                  "LED2_ON_H" : 0x0F,
+                  "LED2_OFF_L" : 0X10,
+                  "LED2_OFF_H" : 0x11,
+                  "LED3_ON_L" : 0x12,
+                  "LED3_ON_H" : 0x13,
+                  "LED3_OFF_L" : 0x14,
+                  "LED3_OFF_H" : 0x15,
+                  "LED4_ON_L" : 0x16,
+                  "LED4_ON_H" : 0x17,
+                  "LED4_OFF_L" : 0x18,
+                  "LED4_OFF_H" : 0x19,
+                  "LED5_ON_L" : 0x1A,
+                  "LED5_ON_H" : 0x1B,
+                  "LED5_OFF_L" : 0x1C,
+                  "LED5_OFF_H" : 0x1D,
+                  "LED6_ON_L" : 0x1E,
+                  "LED6_ON_H" : 0x1F,
+                  "LED6_OFF_L" : 0x20,
+                  "LED6_OFF_H" : 0x21,
+                  "LED7_ON_L" : 0x22,
+                  "LED7_ON_H" : 0x23,
+                  "LED7_OFF_L" : 0x24,
+                  "LED7_OFF_H" : 0x25,
+                  "LED8_ON_L" : 0x26,
+                  "LED8_ON_H" : 0x27,
+                  "LED8_OFF_L" : 0x28,
+                  "LED8_OFF_H" : 0x29,
+                  "LED9_ON_L" : 0x2A,
+                  "LED9_ON_H" : 0x2B,
+                  "LED9_OFF_L" : 0x2C,
+                  "LED9_OFF_H" : 0x2D,
+                  "LED10_ON_L" : 0x2E,
+                  "LED10_ON_H" : 0x2F,
+                  "LED10_OFF_L" : 0x30,
+                  "LED10_OFF_H" : 0x31,
+                  "LED11_ON_L" : 0x32,
+                  "LED11_ON_H" : 0x33,
+                  "LED11_OFF_L" : 0x34,
+                  "LED11_OFF_H" : 0x35,
+                  "LED12_ON_L" : 0x36,
+                  "LED12_ON_H" : 0x37,
+                  "LED12_OFF_L" : 0x38,
+                  "LED12_OFF_H" : 0x39}
+
     def __init__(self, ledcontroller: LedController, is_first_on_led_controller):
         self.ledcontroller = ledcontroller
         self.is_first_on_led_controller = is_first_on_led_controller
 
+    #Add delay in paramater if needed to be used
     def setmain(self, register_address, value):
         i2c_address = self.ledcontroller.addr
-        new_value = int((value * 4095) / 100)
-        self.ledcontroller.bus.i2c_writeto_mem(i2c_address, register_address, new_value.to_bytes(2, byteorder='big'))
+        new_val = int((value*4095)/100)
+        self.ledcontroller.bus.i2c_writeto_mem(i2c_address, register_address, new_val.to_bytes(2, byteorder='little'))
 
     def setred(self, value):
         # value: 0-100
+        #delay = 10
         if self.is_first_on_led_controller:
             pin = LedController.LedRed1
         else:
             pin = LedController.LedRed2
 
         if pin == 1:
-            register_address = 0x0A
+            self.setmain(self.addr_dict["LED1_ON_L"], 0x00)
+            self.setmain(self.addr_dict["LED1_OFF_L"], value)
         else:
-            register_address = 0x22
-        self.setmain(register_address, value)
+            self.setmain(self.addr_dict["LED7_ON_L"], 0x00)
+            self.setmain(self.addr_dict["LED7_OFF_L"], value)
+
 
     def setblue(self, value):
         # value: 0-100
+        #delay = 20
         if self.is_first_on_led_controller:
             pin = LedController.LedBlue1
         else:
             pin = LedController.LedBlue2
 
-        if pin == 2:
-            register_address = 0x0E
+        if pin == 1:
+            self.setmain(self.addr_dict["LED2_ON_L"], 0x00)
+            self.setmain(self.addr_dict["LED2_OFF_L"], value)
         else:
-            register_address = 0x26
-        self.setmain(register_address, value)
+            self.setmain(self.addr_dict["LED8_ON_L"], 0x00)
+            self.setmain(self.addr_dict["LED8_OFF_L"], value)
 
     def setgreen(self, value):
         # value: 0-100
+        # dealy = 30
         if self.is_first_on_led_controller:
             pin = LedController.LedGreen1
         else:
             pin = LedController.LedGreen2
 
-        if pin == 3:
-            register_address = 0x12
+        if pin == 1:
+            self.setmain(self.addr_dict["LED3_ON_L"], 0x00)
+            self.setmain(self.addr_dict["LED3_OFF_L"], value)
         else:
-            register_address = 0x2A
-        self.setmain(register_address, value)
+            self.setmain(self.addr_dict["LED9_ON_L"], 0x00)
+            self.setmain(self.addr_dict["LED9_OFF_L"], value)
 
     def setwhite(self, value):
         # value: 0-100
+        # delay = 40
         if self.is_first_on_led_controller:
             pin = LedController.LedWhite1
         else:
             pin = LedController.LedWhite2
 
-        if pin == 4:
-            register_address = 0x16
+        if pin == 1:
+            self.setmain(self.addr_dict["LED4_ON_L"], 0x00)
+            self.setmain(self.addr_dict["LED4_OFF_L"], value)
         else:
-            register_address = 0x2E
-        self.setmain(register_address, value)
+            self.setmain(self.addr_dict["LED10_ON_L"], 0x00)
+            self.setmain(self.addr_dict["LED10_OFF_L"], value)
 
     def setUV(self, value):
         # value: 0-100
+        # delay = 50
         if self.is_first_on_led_controller:
             pin = LedController.LedUV1
         else:
             pin = LedController.LedUV2
 
-        if pin == 5:
-            register_address = 0x1A
+        if pin == 1:
+            self.setmain(self.addr_dict["LED5_ON_L"], 0x00)
+            self.setmain(self.addr_dict["LED5_OFF_L"], value)
         else:
-            register_address = 0x32
-        self.setmain(register_address, value)
+            self.setmain(self.addr_dict["LED11_ON_L"], 0x00)
+            self.setmain(self.addr_dict["LED11_OFF_L"], value)
 
     def setIR(self, value):
         # value: 0-100
+        # delay = 60
         if self.is_first_on_led_controller:
             pin = LedController.LedIR1
         else:
             pin = LedController.LedIR2
 
-        if pin == 6:
-            register_address = 0x1E
+        if pin == 1:
+            self.setmain(self.addr_dict["LED6_ON_L"], 0x00)
+            self.setmain(self.addr_dict["LED6_OFF_L"], value)
         else:
-            register_address = 0x36
-        self.setmain(register_address, value)
+            self.setmain(self.addr_dict["LED12_ON_L"], 0x00)
+            self.setmain(self.addr_dict["LED12_OFF_L"], value)
