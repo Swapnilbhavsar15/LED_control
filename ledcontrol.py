@@ -102,7 +102,7 @@ class LedCell:
         self.ledcontroller = ledcontroller
         self.is_first_on_led_controller = is_first_on_led_controller
 
-    #Add delay in paramater if needed to be used
+
     def setmain(self, register_address, value):
         i2c_address = self.ledcontroller.addr
         new_val = int((value*4095)/100)
