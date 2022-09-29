@@ -56,3 +56,68 @@ class LedCell:
         else:
             register_address = 0x22
         LedCell.setmain(self,register_address,value)
+
+    def setblue(self, value):
+        # value: 0-100
+        if self.is_first_on_led_controller:
+            pin = LedController.LedBlue1
+        else:
+            pin = LedController.LedBlue2
+
+        if pin == 1:
+            register_address = 0x0E
+        else:
+            register_address = 0x26
+        LedCell.setmain(self,register_address,value)
+
+    def setgreen(self, value):
+        # value: 0-100
+        if self.is_first_on_led_controller:
+            pin = LedController.LedGreen1
+        else:
+            pin = LedController.LedGreen2
+
+        if pin == 1:
+            register_address = 0x12
+        else:
+            register_address = 0x2A
+        LedCell.setmain(self,register_address,value)
+
+    def setwhite(self, value):
+        # value: 0-100
+        if self.is_first_on_led_controller:
+            pin = LedController.LedWhite1
+        else:
+            pin = LedController.LedWhite2
+
+        if pin == 1:
+            register_address = 0x16
+        else:
+            register_address = 0x2E
+        LedCell.setmain(self,register_address,value)
+
+    def setUV(self, value):
+        # value: 0-100
+        if self.is_first_on_led_controller:
+            pin = LedController.LedUV1
+        else:
+            pin = LedController.LedUV2
+
+        if pin == 1:
+            register_address = 0x1A
+        else:
+            register_address = 0x32
+        LedCell.setmain(self,register_address,value)
+
+    def setIR(self, value):
+        # value: 0-100
+        if self.is_first_on_led_controller:
+            pin = LedController.LedIR1
+        else:
+            pin = LedController.LedIR2
+
+        if pin == 1:
+            register_address = 0x1E
+        else:
+            register_address = 0x36
+        LedCell.setmain(self,register_address,value)
