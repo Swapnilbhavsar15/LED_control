@@ -108,90 +108,91 @@ class LedCell:
         new_val = int((value*4096)/100)
         self.ledcontroller.bus.i2c_writeto_mem(i2c_address, register_address, new_val.to_bytes(2, byteorder='little'))
 
-    def setPWM(self, register_address, value, delay):
-        if value+delay <= 100:
-            self.setmain(register_address, delay)
-            self.setmain(register_address, delay+value)
-        elif value+delay > 100:
-            self.setmain(register_address, delay)
-            self.setmain(register_address, delay+value-100)
+    #Add delay parameter if need to be used
+    def setPWM(self, register_address, value):
+        #if value+delay <= 100:
+            self.setmain(register_address, 0x00)
+            self.setmain(register_address + 0x02, value)
+        #elif value+delay > 100:
+            #self.setmain(register_address, delay)
+            #self.setmain(register_address + 0x02, delay+value-100)
 
 
     def setred(self, value):
         # value: 0-100
-        delay = 10
+        #delay = 10
         if self.is_first_on_led_controller:
             pin = LedController.LedRed1
         else:
             pin = LedController.LedRed2
 
         if pin == 1:
-            self.setPWM(self.addr_dict["LED1_ON_L"], value, delay)
+            self.setPWM(self.addr_dict["LED1_ON_L"], value)
         else:
-            self.setPWM(self.addr_dict["LED7_ON_L"], value, delay)
+            self.setPWM(self.addr_dict["LED7_ON_L"], value)
 
 
     def setblue(self, value):
         # value: 0-100
-        delay = 20
+        #delay = 20
         if self.is_first_on_led_controller:
             pin = LedController.LedBlue1
         else:
             pin = LedController.LedBlue2
 
         if pin == 2:
-            self.setPWM(self.addr_dict["LED2_ON_L"], value, delay)
+            self.setPWM(self.addr_dict["LED2_ON_L"], value)
         else:
-            self.setPWM(self.addr_dict["LED8_ON_L"], value, delay)
+            self.setPWM(self.addr_dict["LED8_ON_L"], value)
 
     def setgreen(self, value):
         # value: 0-100
-        delay = 30
+        #delay = 30
         if self.is_first_on_led_controller:
             pin = LedController.LedGreen1
         else:
             pin = LedController.LedGreen2
 
         if pin == 3:
-            self.setPWM(self.addr_dict["LED3_ON_L"], value, delay)
+            self.setPWM(self.addr_dict["LED3_ON_L"], value)
         else:
-            self.setPWM(self.addr_dict["LED9_ON_L"], value, delay)
+            self.setPWM(self.addr_dict["LED9_ON_L"], value)
 
     def setwhite(self, value):
         # value: 0-100
-        delay = 40
+        #delay = 40
         if self.is_first_on_led_controller:
             pin = LedController.LedWhite1
         else:
             pin = LedController.LedWhite2
 
         if pin == 4:
-            self.setPWM(self.addr_dict["LED4_ON_L"], value, delay)
+            self.setPWM(self.addr_dict["LED4_ON_L"], value)
         else:
-            self.setPWM(self.addr_dict["LED10_ON_L"], value, delay)
+            self.setPWM(self.addr_dict["LED10_ON_L"], value)
 
     def setUV(self, value):
         # value: 0-100
-        delay = 50
+        #delay = 50
         if self.is_first_on_led_controller:
             pin = LedController.LedUV1
         else:
             pin = LedController.LedUV2
 
         if pin == 5:
-            self.setPWM(self.addr_dict["LED5_ON_L"], value, delay)
+            self.setPWM(self.addr_dict["LED5_ON_L"], value)
         else:
-            self.setPWM(self.addr_dict["LED11_ON_L"], value, delay)
+            self.setPWM(self.addr_dict["LED11_ON_L"], value)
 
     def setIR(self, value):
         # value: 0-100
-        delay = 60
+        #delay = 60
         if self.is_first_on_led_controller:
             pin = LedController.LedIR1
         else:
             pin = LedController.LedIR2
 
         if pin == 6:
-            self.setPWM(self.addr_dict["LED6_ON_L"], value, delay)
+            self.setPWM(self.addr_dict["LED6_ON_L"], value)
         else:
-            self.setPWM(self.addr_dict["LED12_ON_L"], value, delay)
+            self.setPWM(self.addr_dict["LED12_ON_L"], value)
