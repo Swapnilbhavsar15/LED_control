@@ -43,156 +43,115 @@ class LedController:
 
     def setfreq(self, freq):
         if (24 <= freq <= 1526):
-            prescaleval = round((25000000/(4096*freq))) - 1
+            prescaleval = round((25000000 / (4096 * freq))) - 1
         else:
             print("Frequency value not in range")
         self.bus.i2c_writeto_mem(self.addr, 0xFE, prescaleval.to_bytes(1, 'big'))
 
+
 class LedCell:
-    addr_dict = { "LED1_ON_L" : 0x0A,
-                  "LED1_ON_H" : 0x0B,
-                  "LED1_OFF_L" : 0x0C,
-                  "LED1_OFF_H" : 0x0D,
-                  "LED2_ON_L" : 0x0E,
-                  "LED2_ON_H" : 0x0F,
-                  "LED2_OFF_L" : 0X10,
-                  "LED2_OFF_H" : 0x11,
-                  "LED3_ON_L" : 0x12,
-                  "LED3_ON_H" : 0x13,
-                  "LED3_OFF_L" : 0x14,
-                  "LED3_OFF_H" : 0x15,
-                  "LED4_ON_L" : 0x16,
-                  "LED4_ON_H" : 0x17,
-                  "LED4_OFF_L" : 0x18,
-                  "LED4_OFF_H" : 0x19,
-                  "LED5_ON_L" : 0x1A,
-                  "LED5_ON_H" : 0x1B,
-                  "LED5_OFF_L" : 0x1C,
-                  "LED5_OFF_H" : 0x1D,
-                  "LED6_ON_L" : 0x1E,
-                  "LED6_ON_H" : 0x1F,
-                  "LED6_OFF_L" : 0x20,
-                  "LED6_OFF_H" : 0x21,
-                  "LED7_ON_L" : 0x22,
-                  "LED7_ON_H" : 0x23,
-                  "LED7_OFF_L" : 0x24,
-                  "LED7_OFF_H" : 0x25,
-                  "LED8_ON_L" : 0x26,
-                  "LED8_ON_H" : 0x27,
-                  "LED8_OFF_L" : 0x28,
-                  "LED8_OFF_H" : 0x29,
-                  "LED9_ON_L" : 0x2A,
-                  "LED9_ON_H" : 0x2B,
-                  "LED9_OFF_L" : 0x2C,
-                  "LED9_OFF_H" : 0x2D,
-                  "LED10_ON_L" : 0x2E,
-                  "LED10_ON_H" : 0x2F,
-                  "LED10_OFF_L" : 0x30,
-                  "LED10_OFF_H" : 0x31,
-                  "LED11_ON_L" : 0x32,
-                  "LED11_ON_H" : 0x33,
-                  "LED11_OFF_L" : 0x34,
-                  "LED11_OFF_H" : 0x35,
-                  "LED12_ON_L" : 0x36,
-                  "LED12_ON_H" : 0x37,
-                  "LED12_OFF_L" : 0x38,
-                  "LED12_OFF_H" : 0x39}
 
     def __init__(self, ledcontroller: LedController, is_first_on_led_controller):
         self.ledcontroller = ledcontroller
         self.is_first_on_led_controller = is_first_on_led_controller
 
-
-    def setmain(self, register_address, value):
+    def _setmain(self, register_address, value):
         i2c_address = self.ledcontroller.addr
-        new_val = int((value*4096)/100)
+        new_val = int((value * 4096) / 100)
         self.ledcontroller.bus.i2c_writeto_mem(i2c_address, register_address, new_val.to_bytes(2, byteorder='little'))
 
-    #Add delay parameter if need to be used
-    def setPWM(self, register_address, value):
-        #if value+delay <= 100:
-            self.setmain(register_address, 0x00)
-            self.setmain(register_address + 0x02, value)
-        #elif value+delay > 100:
-            #self.setmain(register_address, delay)
-            #self.setmain(register_address + 0x02, delay+value-100)
+    # Add delay parameter if need to be used
+    def _setPWM(self, register_address, value):
+        # if value+delay <= 100:
+        self._setmain(register_address, 0x00)
+        self._setmain(register_address + 0x02, value)
+        # elif value+delay > 100:
+            # self.setmain(register_address, delay)
+            # self.setmain(register_address + 0x02, delay+value-100)
 
+    def _get_register(self, pin):
+        addr_dict = { 1: 0x0A, 2: 0x0E, 3: 0x12, 4: 0x16, 5: 0x1A, 6: 0x1E,
+                      7: 0x22, 8: 0x26, 9: 0x2A, 10: 0x2E, 11: 0x32, 12: 0x36 }
+        return addr_dict[pin]
 
     def setred(self, value):
-        # value: 0-100
-        #delay = 10
+        """
+        The function turns Red Led on with desired intersity value
+        :param value: 0-100 Led on time
+        """
+        # delay = 10
         if self.is_first_on_led_controller:
             pin = LedController.LedRed1
         else:
             pin = LedController.LedRed2
+        register_address = self._get_register(pin)
+        self._setPWM(register_address, value)
 
-        if pin == 1:
-            self.setPWM(self.addr_dict["LED1_ON_L"], value)
-        else:
-            self.setPWM(self.addr_dict["LED7_ON_L"], value)
 
 
     def setblue(self, value):
-        # value: 0-100
-        #delay = 20
+       """
+        The function turns Blue Led on with desired intensity value
+        :param value: 0-100 Led on time
+       """
+        # delay = 20
         if self.is_first_on_led_controller:
             pin = LedController.LedBlue1
         else:
             pin = LedController.LedBlue2
-
-        if pin == 2:
-            self.setPWM(self.addr_dict["LED2_ON_L"], value)
-        else:
-            self.setPWM(self.addr_dict["LED8_ON_L"], value)
+        register_address = self._get_register(pin)
+        self._setPWM(register_address, value)
 
     def setgreen(self, value):
-        # value: 0-100
-        #delay = 30
+        """
+        The function turns Green Led on with desired intensity value
+        :param value: 0-100 Led on time
+        """
+        # delay = 30
         if self.is_first_on_led_controller:
             pin = LedController.LedGreen1
         else:
             pin = LedController.LedGreen2
-
-        if pin == 3:
-            self.setPWM(self.addr_dict["LED3_ON_L"], value)
-        else:
-            self.setPWM(self.addr_dict["LED9_ON_L"], value)
+        register_address = self._get_register(pin)
+        self._setPWM(register_address, value)
 
     def setwhite(self, value):
-        # value: 0-100
-        #delay = 40
+        """
+        The function turns White Led on with desired intensity value
+        :param value: 0-100 Led on time
+        """
+        # delay = 40
         if self.is_first_on_led_controller:
             pin = LedController.LedWhite1
         else:
             pin = LedController.LedWhite2
-
-        if pin == 4:
-            self.setPWM(self.addr_dict["LED4_ON_L"], value)
-        else:
-            self.setPWM(self.addr_dict["LED10_ON_L"], value)
+        register_address = self._get_register(pin)
+        self._setPWM(register_address, value)
 
     def setUV(self, value):
-        # value: 0-100
-        #delay = 50
+        """
+        The function turns Ulatraviolet Led on with desired intensity value
+        :param value: 0-100 Led on time
+        """
+        # delay = 50
         if self.is_first_on_led_controller:
             pin = LedController.LedUV1
         else:
             pin = LedController.LedUV2
-
-        if pin == 5:
-            self.setPWM(self.addr_dict["LED5_ON_L"], value)
-        else:
-            self.setPWM(self.addr_dict["LED11_ON_L"], value)
+        register_address = self._get_register(pin)
+        self._setPWM(register_address, value)
 
     def setIR(self, value):
-        # value: 0-100
-        #delay = 60
+        """
+        The function turns Infrared Led on with desired intensity value
+        :param value: 0-100 Led on time
+        """
+        # delay = 60
         if self.is_first_on_led_controller:
             pin = LedController.LedIR1
         else:
             pin = LedController.LedIR2
+        register_address = self._get_register(pin)
+        self._setPWM(register_address, value)
 
-        if pin == 6:
-            self.setPWM(self.addr_dict["LED6_ON_L"], value)
-        else:
-            self.setPWM(self.addr_dict["LED12_ON_L"], value)
+
