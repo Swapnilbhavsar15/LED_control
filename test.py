@@ -6,7 +6,7 @@ def test_1():
     ledcontroller = LedController(5, i2c)
     ledcontroller.setfreq(200)
     led_IR = LedCell(ledcontroller, True)
-    led_IR.setblue(30)
+    led_IR.setir(30)
 
 
 
