@@ -42,7 +42,7 @@ class LedController:
         self.bus = bus
 
     def setfreq(self, freq):
-        if (24 <= freq <= 1526):
+        if 24 <= freq <= 1526:
             prescaleval = round((25000000 / (4096 * freq))) - 1
         else:
             print("Frequency value not in range")
@@ -76,10 +76,10 @@ class LedCell:
 
     def setred(self, value):
         """
-        The function turns Red Led on with desired intersity value
+        The function turns Red Led on with desired intensity value
         :param value: 0-100 Led on time
         """
-        # delay = 10
+         # delay = 10
         if self.is_first_on_led_controller:
             pin = LedController.LedRed1
         else:
@@ -87,14 +87,12 @@ class LedCell:
         register_address = self._get_register(pin)
         self._setPWM(register_address, value)
 
-
-
     def setblue(self, value):
-       """
+        """
         The function turns Blue Led on with desired intensity value
         :param value: 0-100 Led on time
-       """
-        # delay = 20
+        """
+         # delay = 20
         if self.is_first_on_led_controller:
             pin = LedController.LedBlue1
         else:
@@ -102,12 +100,13 @@ class LedCell:
         register_address = self._get_register(pin)
         self._setPWM(register_address, value)
 
+
     def setgreen(self, value):
         """
         The function turns Green Led on with desired intensity value
         :param value: 0-100 Led on time
         """
-        # delay = 30
+         # delay = 30
         if self.is_first_on_led_controller:
             pin = LedController.LedGreen1
         else:
@@ -120,7 +119,7 @@ class LedCell:
         The function turns White Led on with desired intensity value
         :param value: 0-100 Led on time
         """
-        # delay = 40
+         # delay = 40
         if self.is_first_on_led_controller:
             pin = LedController.LedWhite1
         else:
@@ -133,7 +132,7 @@ class LedCell:
         The function turns Ulatraviolet Led on with desired intensity value
         :param value: 0-100 Led on time
         """
-        # delay = 50
+         # delay = 50
         if self.is_first_on_led_controller:
             pin = LedController.LedUV1
         else:
