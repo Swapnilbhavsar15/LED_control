@@ -8,7 +8,7 @@ class PicoI2c(I2cAbstraction):
         self.i2c = I2C(1, self.scl, self.sda, self.freq)
 
     def scan(self):
-        I2C.scan()
+        self.i2c.scan()
 
     def enable(self):
         p_out.on()
@@ -17,13 +17,13 @@ class PicoI2c(I2cAbstraction):
         p_out.off()
 
     def i2c_writeto(self, addr, buf):
-        I2C.writeto(addr, buf)
+        self.i2c.writeto(addr, buf)
 
     def i2c_readfrom(self, addr, nbytes):
-        I2C.readfrom(addr, nbytes)
+        self.i2c.readfrom(addr, nbytes)
 
     def i2c_readfrom_mem(self, addr, memaddr, nbytes):
-        I2C.readfrom_mem(addr, memaddr, nbytes)
+        self.i2c.readfrom_mem(addr, memaddr, nbytes)
 
     def i2c_writeto_mem(self, addr, memaddr, buf):
-        I2C.writeto_mem(addr, memaddr, buf)
+        self.i2c.writeto_mem(addr, memaddr, buf)
