@@ -42,9 +42,10 @@ class LedController:
     LedOp2 = 14
 
 
-    def __init__(self, addr, bus: I2cAbstraction):
+    def __init__(self, addr, bus: I2cAbstraction, enable):
         self.addr = addr
         self.bus = bus
+        self.enable = enable
 
     def setfreq(self, freq):
         if 24 <= freq <= 1526:
@@ -53,6 +54,11 @@ class LedController:
         else:
             print("Frequency value not in range")
 
+    def setoutputenable(self):
+        if self.enable:
+            self.bus.enable()
+        else:
+            self.bus.disable()
 
 class LedCell:
 
