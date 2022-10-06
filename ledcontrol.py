@@ -5,6 +5,12 @@ class I2cAbstraction:
     def scan(self):
         raise NotImplementedError
 
+    def enable(self):
+        raise NotImplementedError
+
+    def disable(self):
+        raise NotImplementedError
+
     def i2c_writeto(self, addr, buf):
         raise NotImplementedError
 
@@ -34,8 +40,7 @@ class LedController:
     LedIR2 = 12
     LedOp1 = 13
     LedOp2 = 14
-    Scl = 15
-    Sda = 16
+
 
     def __init__(self, addr, bus: I2cAbstraction):
         self.addr = addr

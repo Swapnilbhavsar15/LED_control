@@ -1,7 +1,7 @@
 from machine import I2C
 from ledcontrol import I2cAbstraction
 
-
+p_out = Pin('X1', Pin.OUT_PP)
 class PybI2c(I2cAbstraction):
     def __init__(self):
         super.__init__(self, scl, sda, freq)
@@ -9,6 +9,12 @@ class PybI2c(I2cAbstraction):
 
     def scan(self):
         I2C.scan()
+
+    def enable(self):
+        p_out.high()
+
+    def disable(self):
+        p_out.low()
 
     def i2c_writeto(self, addr, buf):
         I2C.writeto(addr, buf)
