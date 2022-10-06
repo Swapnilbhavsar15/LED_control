@@ -76,8 +76,8 @@ class LedCell:
 
     def setred(self, value):
         """
-        The function turns Red Led on with desired intensity value
-        :param value: 0-100 Led on time
+        The function turns Red Led on with desired intensity(brightness) value
+        :param value: 0-100 Intensity of the Led
         """
         # delay = 10
         if self.is_first_on_led_controller:
@@ -89,8 +89,8 @@ class LedCell:
 
     def setblue(self, value):
         """
-        The function turns Blue Led on with desired intensity value
-        :param value: 0-100 Led on time
+        The function turns Blue Led on with desired intensity(brightness) value
+        :param value: 0-100 Intensity of the Led
         """
         # delay = 20
         if self.is_first_on_led_controller:
@@ -102,8 +102,8 @@ class LedCell:
 
     def setgreen(self, value):
         """
-        The function turns Green Led on with desired intensity value
-        :param value: 0-100 Led on time
+        The function turns Green Led on with desired intensity(brightness) value
+        :param value: 0-100 Intensity of the Led
         """
         # delay = 30
         if self.is_first_on_led_controller:
@@ -115,8 +115,8 @@ class LedCell:
 
     def setwhite(self, value):
         """
-        The function turns White Led on with desired intensity value
-        :param value: 0-100 Led on time
+        The function turns White Led on with desired intensity(brightness) value
+        :param value: 0-100 Intensity of the Led
         """
         # delay = 40
         if self.is_first_on_led_controller:
@@ -128,8 +128,8 @@ class LedCell:
 
     def setuv(self, value):
         """
-        The function turns Ulatraviolet Led on with desired intensity value
-        :param value: 0-100 Led on time
+        The function turns Ultraviolet Led on with desired intensity(brightness) value
+        :param value: 0-100 Intensity of the Led
         """
         # delay = 50
         if self.is_first_on_led_controller:
@@ -141,8 +141,8 @@ class LedCell:
 
     def setir(self, value):
         """
-        The function turns Infrared Led on with desired intensity value
-        :param value: 0-100 Led on time
+        The function turns Infrared Led on with desired intensity(brightness) value
+        :param value: 0-100 Intensity of the Led
         """
         # delay = 60
         if self.is_first_on_led_controller:
