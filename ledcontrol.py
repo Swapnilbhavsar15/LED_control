@@ -41,8 +41,7 @@ class LedController:
     LedOp1 = 13
     LedOp2 = 14
 
-
-    def __init__(self, addr, bus: I2cAbstraction, enable = 'True'):
+    def __init__(self, addr, bus: I2cAbstraction, enable='True'):
         self.addr = addr
         self.bus = bus
         self.enable = enable
@@ -60,6 +59,7 @@ class LedController:
             self.bus.enable()
         else:
             self.bus.disable()
+
 
 class LedCell:
 
