@@ -48,6 +48,10 @@ class LedController:
         self.setoutputenable()
 
     def setfreq(self, freq):
+        """
+        The function sets the PWM frequency with the specified value. Default value is 200 Hertz
+        :param freq: 24-1526 Hertz
+        """
         if 24 <= freq <= 1526:
             prescalevel = round((25000000 / (4096 * freq))) - 1
             self.bus.i2c_writeto_mem(self.addr, 0xFE, prescalevel.to_bytes(1, 'big'))
@@ -55,6 +59,9 @@ class LedController:
             print("Frequency value not in range")
 
     def setoutputenable(self):
+        """
+        The function is used to enable or disable the LED Cell at a particular address.
+        """
         if self.enable:
             self.bus.enable()
         else:
@@ -86,10 +93,10 @@ class LedCell:
                      7: 0x22, 8: 0x26, 9: 0x2A, 10: 0x2E, 11: 0x32, 12: 0x36}
         return addr_dict[pin]
 
-    def setred(self, value):
+    def set_red(self, value):
         """
-        The function turns Red Led on with desired intensity(brightness) value
-        :param value: 0-100 Intensity of the Led
+        The function turns the Red LED on with desired intensity(brightness) value
+        :param value: 0-100 Intensity of the LED
         """
         # delay = 10
         if self.is_first_on_led_controller:
@@ -99,10 +106,10 @@ class LedCell:
         register_address = self._get_register(pin)
         self._setpwm(register_address, value)
 
-    def setblue(self, value):
+    def set_blue(self, value):
         """
-        The function turns Blue Led on with desired intensity(brightness) value
-        :param value: 0-100 Intensity of the Led
+        The function turns the Blue LED on with desired intensity(brightness) value
+        :param value: 0-100 Intensity of the LED
         """
         # delay = 20
         if self.is_first_on_led_controller:
@@ -112,10 +119,10 @@ class LedCell:
         register_address = self._get_register(pin)
         self._setpwm(register_address, value)
 
-    def setgreen(self, value):
+    def set_green(self, value):
         """
-        The function turns Green Led on with desired intensity(brightness) value
-        :param value: 0-100 Intensity of the Led
+        The function turns Green the LED on with desired intensity(brightness) value
+        :param value: 0-100 Intensity of the LED
         """
         # delay = 30
         if self.is_first_on_led_controller:
@@ -125,10 +132,10 @@ class LedCell:
         register_address = self._get_register(pin)
         self._setpwm(register_address, value)
 
-    def setwhite(self, value):
+    def set_white(self, value):
         """
-        The function turns White Led on with desired intensity(brightness) value
-        :param value: 0-100 Intensity of the Led
+        The function turns the White LED on with desired intensity(brightness) value
+        :param value: 0-100 Intensity of the LED
         """
         # delay = 40
         if self.is_first_on_led_controller:
@@ -138,10 +145,10 @@ class LedCell:
         register_address = self._get_register(pin)
         self._setpwm(register_address, value)
 
-    def setuv(self, value):
+    def set_uv(self, value):
         """
-        The function turns Ultraviolet Led on with desired intensity(brightness) value
-        :param value: 0-100 Intensity of the Led
+        The function turns the Ultraviolet LED on with desired intensity(brightness) value
+        :param value: 0-100 Intensity of the LED
         """
         # delay = 50
         if self.is_first_on_led_controller:
@@ -151,10 +158,10 @@ class LedCell:
         register_address = self._get_register(pin)
         self._setpwm(register_address, value)
 
-    def setir(self, value):
+    def set_ir(self, value):
         """
-        The function turns Infrared Led on with desired intensity(brightness) value
-        :param value: 0-100 Intensity of the Led
+        The function turns the Infrared LED on with desired intensity(brightness) value
+        :param value: 0-100 Intensity of the LED
         """
         # delay = 60
         if self.is_first_on_led_controller:
