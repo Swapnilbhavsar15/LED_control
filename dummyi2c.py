@@ -8,12 +8,6 @@ class I2CDummy(I2cAbstraction):
     def scan(self):
         print("scanned")
 
-    def enable(self):
-        print("Output Enabled")
-
-    def disable(self):
-        print("Output Disabled")
-
     def i2c_writeto(self, addr, buf):
         print(addr, buf)
 

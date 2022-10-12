@@ -10,12 +10,6 @@ class PicoI2c(I2cAbstraction):
     def scan(self):
         self.i2c.scan()
 
-    def enable(self):
-        p_out.on()
-
-    def disable(self):
-        p_out.off()
-
     def i2c_writeto(self, addr, buf):
         self.i2c.writeto(addr, buf)
 

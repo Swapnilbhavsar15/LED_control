@@ -5,12 +5,6 @@ class I2cAbstraction:
     def scan(self):
         raise NotImplementedError
 
-    def enable(self):
-        raise NotImplementedError
-
-    def disable(self):
-        raise NotImplementedError
-
     def i2c_writeto(self, addr, buf):
         raise NotImplementedError
 
@@ -41,11 +35,11 @@ class LedController:
     LedOp1 = 13
     LedOp2 = 14
 
-    def __init__(self, addr, bus: I2cAbstraction, enable='True'):
+    def __init__(self, addr, bus: I2cAbstraction, enable=True):
         self.addr = addr
         self.bus = bus
         self.enable = enable
-        self.setoutputenable()
+        self.set_enable()
 
     def setfreq(self, freq):
         """
@@ -58,15 +52,14 @@ class LedController:
         else:
             print("Frequency value not in range")
 
-    def setoutputenable(self):
+    def set_enable(self):
         """
         The function is used to enable or disable the LED Cell at a particular address.
         """
         if self.enable:
-            self.bus.enable()
+            self.bus.i2c_writeto_mem(self.addr, 0x06, (0).to_bytes(2, 'little'))
         else:
-            self.bus.disable()
-
+            self.bus.i2c_writeto_mem(self.addr, 0x08, (0).to_bytes(2, 'little'))
 
 class LedCell:
 
@@ -82,14 +75,14 @@ class LedCell:
     # Add delay parameter if need to be used
     def _setpwm(self, register_address, value):
         # if value+delay <= 100:
-        self._setmain(register_address, 0x00)
+        self._setmain(register_address, 0)
         self._setmain(register_address + 0x02, value)
         # elif value+delay > 100:
         # self.setmain(register_address, delay)
         # self.setmain(register_address + 0x02, delay+value-100)
 
     def _get_register(self, pin):
-        addr_dict = {1: 0x0A, 2: 0x0E, 3: 0x12, 4: 0x16, 5: 0x1A, 6: 0x1E,
+        addr_dict = {0: 0x06, 1: 0x0A, 2: 0x0E, 3: 0x12, 4: 0x16, 5: 0x1A, 6: 0x1E,
                      7: 0x22, 8: 0x26, 9: 0x2A, 10: 0x2E, 11: 0x32, 12: 0x36}
         return addr_dict[pin]
 

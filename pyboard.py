@@ -10,12 +10,6 @@ class PybI2c(I2cAbstraction):
     def scan(self):
         self.i2c.scan()
 
-    def enable(self):
-        p_out.high()
-
-    def disable(self):
-        p_out.low()
-
     def i2c_writeto(self, addr, buf):
         self.i2c.writeto(addr, buf)
 
