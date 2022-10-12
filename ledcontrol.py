@@ -62,6 +62,7 @@ class LedController:
         else:
             self.bus.i2c_writeto_mem(self.addr, 0x08, (0).to_bytes(2, 'little'))
 
+
 class LedCell:
 
     def __init__(self, ledcontroller: LedController, is_first_on_led_controller):
