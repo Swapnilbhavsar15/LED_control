@@ -39,7 +39,7 @@ class LedController:
         self.addr = addr
         self.bus = bus
         self.enable = enable
-        self.set_enable()
+        self.set_enable(enable)
 
     def setfreq(self, freq):
         """
@@ -52,10 +52,11 @@ class LedController:
         else:
             print("Frequency value not in range")
 
-    def set_enable(self):
+    def set_enable(self, enable):
         """
         The function is used to enable or disable the LED Cell at a particular address.
         """
+        self.enable = enable
         if self.enable:
             self.bus.i2c_writeto_mem(self.addr, 0x06, (0).to_bytes(2, 'little'))
         else:
