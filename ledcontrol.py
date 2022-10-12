@@ -59,8 +59,10 @@ class LedController:
         self.enable = enable
         if self.enable:
             self.bus.i2c_writeto_mem(self.addr, 0x06, (0).to_bytes(2, 'little'))
+            self.bus.i2c_writeto_mem(self.addr, 0x08, (4095).to_bytes(2, 'little'))
         else:
             self.bus.i2c_writeto_mem(self.addr, 0x08, (0).to_bytes(2, 'little'))
+            self.bus.i2c_writeto_mem(self.addr, 0x06, (4095).to_bytes(2, 'little'))
 
 
 class LedCell:

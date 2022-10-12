@@ -11,6 +11,7 @@ def test_1():
 
 
 
+    ledcontroller.set_enable(True) # 0 -> 6
+    ledcontroller.set_enable(False) # 0 -> 8
 
-
-
+    ledcontroller.set_enable(True)  # 0 -> 6
