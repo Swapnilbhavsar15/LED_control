@@ -1,7 +1,4 @@
 class I2cAbstraction:
-    def __init__(self, scl, sda, freq):
-        pass
-
     def scan(self):
         raise NotImplementedError
 
@@ -56,13 +53,16 @@ class LedController:
         """
         The function is used to enable or disable the LED Cell at a particular address.
         """
+
         self.enable = enable
         if self.enable:
-            self.bus.i2c_writeto_mem(self.addr, 0x06, (0).to_bytes(2, 'little'))
-            self.bus.i2c_writeto_mem(self.addr, 0x08, (4095).to_bytes(2, 'little'))
+            self.bus.i2c_writeto_mem(self.addr, 0x06, b'\x00')
+            self.bus.i2c_writeto_mem(self.addr, 0x07, b'\x10')
+            self.bus.i2c_writeto_mem(self.addr, 0x09, b'\x00')
         else:
-            self.bus.i2c_writeto_mem(self.addr, 0x08, (0).to_bytes(2, 'little'))
-            self.bus.i2c_writeto_mem(self.addr, 0x06, (4095).to_bytes(2, 'little'))
+            self.bus.i2c_writeto_mem(self.addr, 0x08, b'\x00')
+            self.bus.i2c_writeto_mem(self.addr, 0x09, b'\x00')
+            self.bus.i2c_writeto_mem(self.addr, 0x07, b'\x00')
 
 
 class LedCell:
@@ -74,7 +74,8 @@ class LedCell:
     def _setmain(self, register_address, value):
         i2c_address = self.ledcontroller.addr
         new_val = int((value * 4096) / 100)
-        self.ledcontroller.bus.i2c_writeto_mem(i2c_address, register_address, new_val.to_bytes(2, byteorder='little'))
+        self.ledcontroller.bus.i2c_writeto_mem(i2c_address, register_address, new_val.to_bytes(2, 'little'))
+        self.ledcontroller.bus.i2c_writeto_mem(i2c_address, register_address + 0x01, new_val.to_bytes(2, 'big'))
 
     # Add delay parameter if need to be used
     def _setpwm(self, register_address, value):

@@ -7,11 +7,5 @@ def test_1():
     ledcontroller.setfreq(200)
     ledcontroller.set_enable(True)
     led_IR = LedCell(ledcontroller, True)
-    led_IR.set_ir(90)
+    led_IR.set_ir(30)
 
-
-
-    ledcontroller.set_enable(True) # 0 -> 6
-    ledcontroller.set_enable(False) # 0 -> 8
-
-    ledcontroller.set_enable(True)  # 0 -> 6
