@@ -18,17 +18,17 @@ class I2cAbstraction:
 class LedController:
     LedEn = 0
     LedRed1 = 1
-    LedBlue1 = 2
-    LedGreen1 = 3
-    LedWhite1 = 4
+    LedGreen1 = 2
+    LedBlue1 = 3
+    LedIR1 = 4
     LedUV1 = 5
-    LedIR1 = 6
+    LedWhite1 = 6
     LedRed2 = 7
-    LedBlue2 = 8
-    LedGreen2 = 9
-    LedWhite2 = 10
+    LedGreen2 = 8
+    LedBlue2 = 9
+    LedIR2 = 10
     LedUV2 = 11
-    LedIR2 = 12
+    LedWhite2 = 12
     LedOp1 = 13
     LedOp2 = 14
 
@@ -36,7 +36,13 @@ class LedController:
         self.addr = addr
         self.bus = bus
         self.enable = enable
+        self._set_mode()
         self.set_enable(enable)
+
+    def _set_mode(self):
+        self.bus.i2c_writeto_mem(self.addr, 0x00, b'\x01')
+        self.bus.i2c_writeto_mem(self.addr, 0x01, b'\x14')
+
 
     def setfreq(self, freq):
         """
@@ -56,13 +62,16 @@ class LedController:
 
         self.enable = enable
         if self.enable:
-            self.bus.i2c_writeto_mem(self.addr, 0x06, b'\x00')
-            self.bus.i2c_writeto_mem(self.addr, 0x07, b'\x10')
-            self.bus.i2c_writeto_mem(self.addr, 0x09, b'\x00')
-        else:
             self.bus.i2c_writeto_mem(self.addr, 0x08, b'\x00')
             self.bus.i2c_writeto_mem(self.addr, 0x09, b'\x00')
             self.bus.i2c_writeto_mem(self.addr, 0x07, b'\x00')
+            self.bus.i2c_writeto_mem(self.addr, 0x06, b'\x00')
+
+        else:
+            self.bus.i2c_writeto_mem(self.addr, 0x06, b'\x00')
+            self.bus.i2c_writeto_mem(self.addr, 0x07, b'\x10')
+            self.bus.i2c_writeto_mem(self.addr, 0x09, b'\x00')
+            self.bus.i2c_writeto_mem(self.addr, 0x08, b'\x00')
 
 
 class LedCell:
@@ -73,9 +82,12 @@ class LedCell:
 
     def _setmain(self, register_address, value):
         i2c_address = self.ledcontroller.addr
-        new_val = int((value * 4096) / 100)
-        self.ledcontroller.bus.i2c_writeto_mem(i2c_address, register_address, new_val.to_bytes(2, 'little'))
-        self.ledcontroller.bus.i2c_writeto_mem(i2c_address, register_address + 0x01, new_val.to_bytes(2, 'big'))
+        new_val = int(((value * 4096) / 100) - 1)
+        if new_val < 0:
+            new_val = 0
+        byte_val = new_val.to_bytes(2, 'little')
+        self.ledcontroller.bus.i2c_writeto_mem(i2c_address, register_address, byte_val[0:1])
+        self.ledcontroller.bus.i2c_writeto_mem(i2c_address, register_address + 0x01, byte_val[1:2])
 
     # Add delay parameter if need to be used
     def _setpwm(self, register_address, value):
