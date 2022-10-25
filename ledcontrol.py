@@ -43,7 +43,6 @@ class LedController:
         self.bus.i2c_writeto_mem(self.addr, 0x00, b'\x01')
         self.bus.i2c_writeto_mem(self.addr, 0x01, b'\x14')
 
-
     def setfreq(self, freq):
         """
         The function sets the PWM frequency with the specified value. Default value is 200 Hertz
@@ -75,6 +74,7 @@ class LedController:
 
 
 class LedCell:
+    white = 0
 
     def __init__(self, ledcontroller: LedController, is_first_on_led_controller):
         self.ledcontroller = ledcontroller
@@ -85,6 +85,8 @@ class LedCell:
         new_val = int(((value * 4096) / 100) - 1)
         if new_val < 0:
             new_val = 0
+        if self.white:
+            new_val = int(new_val)
         byte_val = new_val.to_bytes(2, 'little')
         self.ledcontroller.bus.i2c_writeto_mem(i2c_address, register_address, byte_val[0:1])
         self.ledcontroller.bus.i2c_writeto_mem(i2c_address, register_address + 0x01, byte_val[1:2])
@@ -143,6 +145,7 @@ class LedCell:
         self._setpwm(register_address, value)
 
     def set_white(self, value):
+        self.white = 1
         """
         The function turns the White LED on with desired intensity(brightness) value
         :param value: 0-100 Intensity of the LED
