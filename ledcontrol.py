@@ -75,6 +75,7 @@ class LedController:
 
 class LedCell:
     white = 0
+    uv = 0
 
     def __init__(self, ledcontroller: LedController, is_first_on_led_controller):
         self.ledcontroller = ledcontroller
@@ -86,7 +87,11 @@ class LedCell:
         if new_val < 0:
             new_val = 0
         if self.white:
-            new_val = int(new_val/2)
+            if new_val > 1638:
+                new_val = 1638
+        if self.uv:
+            if  new_val > 3072:
+                new_val = 3072
         byte_val = new_val.to_bytes(2, 'little')
         self.ledcontroller.bus.i2c_writeto_mem(i2c_address, register_address, byte_val[0:1])
         self.ledcontroller.bus.i2c_writeto_mem(i2c_address, register_address + 0x01, byte_val[1:2])
@@ -164,6 +169,7 @@ class LedCell:
         :param value: 0-100 Intensity of the LED
         """
         # delay = 50
+        uv = 1
         if self.is_first_on_led_controller:
             pin = LedController.LedUV1
         else:
