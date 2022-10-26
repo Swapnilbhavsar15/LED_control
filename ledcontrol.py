@@ -74,8 +74,6 @@ class LedController:
 
 
 class LedCell:
-    white = 0
-    uv = 0
 
     def __init__(self, ledcontroller: LedController, is_first_on_led_controller):
         self.ledcontroller = ledcontroller
@@ -86,12 +84,6 @@ class LedCell:
         new_val = int(((value * 4096) / 100) - 1)
         if new_val < 0:
             new_val = 0
-        if self.white:
-            if new_val > 1638:
-                new_val = 1638
-        if self.uv:
-            if  new_val > 3072:
-                new_val = 3072
         byte_val = new_val.to_bytes(2, 'little')
         self.ledcontroller.bus.i2c_writeto_mem(i2c_address, register_address, byte_val[0:1])
         self.ledcontroller.bus.i2c_writeto_mem(i2c_address, register_address + 0x01, byte_val[1:2])
@@ -161,6 +153,8 @@ class LedCell:
         else:
             pin = LedController.LedWhite2
         register_address = self._get_register(pin)
+        if value > 40:
+            value = 40
         self._setpwm(register_address, value)
 
     def set_uv(self, value):
@@ -175,6 +169,8 @@ class LedCell:
         else:
             pin = LedController.LedUV2
         register_address = self._get_register(pin)
+        if value > 75:
+            value = 75
         self._setpwm(register_address, value)
 
     def set_ir(self, value):
