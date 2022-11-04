@@ -31,16 +31,16 @@ class LedController:
     LedWhite2 = 12
     LedOp1 = 13
     LedOp2 = 14
+    addr_val = 64 # Address start from 65 so initial val set to 64 to get the value from user starting from 1
 
     def __init__(self, addr, bus: I2cAbstraction, enable=True):
-        self.addr = addr + 64
+        self.addr = addr + self.addr_val
         self.bus = bus
         self._set_mode()
         self.set_enable(enable)
 
     def _set_mode(self):
         self.bus.i2c_writeto_mem(self.addr, 0x00, b'\x01')
-        self.bus.i2c_writeto_mem(self.addr, 0x01, b'\x14')
 
     def setfreq(self, freq):
         """
@@ -58,21 +58,22 @@ class LedController:
         The function is used to enable or disable the LED Cell at a particular address.
         """
         if enable:
-            self.bus.i2c_writeto_mem(self.addr, 0x08, b'\x00')
-            self.bus.i2c_writeto_mem(self.addr, 0x09, b'\x00')
-            self.bus.i2c_writeto_mem(self.addr, 0x07, b'\x00')
-            self.bus.i2c_writeto_mem(self.addr, 0x06, b'\x00')
-
-        else:
             self.bus.i2c_writeto_mem(self.addr, 0x06, b'\x00')
             self.bus.i2c_writeto_mem(self.addr, 0x07, b'\x10')
             self.bus.i2c_writeto_mem(self.addr, 0x09, b'\x00')
             self.bus.i2c_writeto_mem(self.addr, 0x08, b'\x00')
 
+        else:
+            self.bus.i2c_writeto_mem(self.addr, 0x08, b'\x00')
+            self.bus.i2c_writeto_mem(self.addr, 0x09, b'\x00')
+            self.bus.i2c_writeto_mem(self.addr, 0x07, b'\x00')
+            self.bus.i2c_writeto_mem(self.addr, 0x06, b'\x00')
+
 
 class LedCell:
     white_limit = 40  # Limit value for the white LED as it gets heated up at higher values
     uv_limit = 75  # Limit value for the UV LED as it gets heated up at higher values
+    val_limit = 100 # Max value of intensity
     addr_dict = {0: 0x06, 1: 0x0A, 2: 0x0E, 3: 0x12, 4: 0x16, 5: 0x1A, 6: 0x1E,
                  7: 0x22, 8: 0x26, 9: 0x2A, 10: 0x2E, 11: 0x32, 12: 0x36}
 
@@ -98,7 +99,7 @@ class LedCell:
 
     def set_red(self, value):
         """
-        The function turns the Red LED on with desired intensity(brightness) value
+        The function turns the Red LED on with desired intensity(brightness) value. Values inverted as PCA9685 gives inverted signals.
         :param value: 0-100 Intensity of the LED
         """
         if self.is_first_on_led_controller:
@@ -106,11 +107,11 @@ class LedCell:
         else:
             pin = LedController.LedRed2
         register_address = self._get_register(pin)
-        self._setpwm(register_address, value)
+        self._setpwm(register_address, self.val_limit-value)
 
     def set_blue(self, value):
         """
-        The function turns the Blue LED on with desired intensity(brightness) value
+        The function turns the Blue LED on with desired intensity(brightness) value.Values inverted as PCA9685 gives inverted signals.
         :param value: 0-100 Intensity of the LED
         """
         if self.is_first_on_led_controller:
@@ -118,11 +119,12 @@ class LedCell:
         else:
             pin = LedController.LedBlue2
         register_address = self._get_register(pin)
-        self._setpwm(register_address, value)
+        self._setpwm(register_address, self.val_limit-value)
 
     def set_green(self, value):
         """
-        The function turns Green the LED on with desired intensity(brightness) value
+        The function turns Green the LED on with desired intensity(brightness) value.Values inverted as PCA9685 gives
+        inverted signals.
         :param value: 0-100 Intensity of the LED
         """
         if self.is_first_on_led_controller:
@@ -130,11 +132,12 @@ class LedCell:
         else:
             pin = LedController.LedGreen2
         register_address = self._get_register(pin)
-        self._setpwm(register_address, value)
+        self._setpwm(register_address, self.val_limit-value)
 
     def set_white(self, value):
         """
-        The function turns the White LED on with desired intensity(brightness) value
+        The function turns the White LED on with desired intensity(brightness) value.Values inverted as PCA9685 gives
+        inverted signals.
         :param value: 0-100 Intensity of the LED
         Intensity value limited to 40 even if it ranges from 40-100
         """
@@ -145,11 +148,12 @@ class LedCell:
         register_address = self._get_register(pin)
         if value > self.white_limit:
             value = self.white_limit
-        self._setpwm(register_address, value)
+        self._setpwm(register_address, self.val_limit-value)
 
     def set_uv(self, value):
         """
-        The function turns the Ultraviolet LED on with desired intensity(brightness) value
+        The function turns the Ultraviolet LED on with desired intensity(brightness) value.Values inverted as PCA9685
+        gives inverted signals.
         :param value: 0-100 Intensity of the LED
         Intensity value limited to 75 even if it ranges from 75-100
         """
@@ -160,11 +164,12 @@ class LedCell:
         register_address = self._get_register(pin)
         if value > self.uv_limit:
             value = self.uv_limit
-        self._setpwm(register_address, value)
+        self._setpwm(register_address, self.val_limit-value)
 
     def set_ir(self, value):
         """
-        The function turns the Infrared LED on with desired intensity(brightness) value
+        The function turns the Infrared LED on with desired intensity(brightness) value.Values inverted as PCA9685 gives
+        inverted signals.
         :param value: 0-100 Intensity of the LED
         """
         # delay = 60
@@ -173,4 +178,4 @@ class LedCell:
         else:
             pin = LedController.LedIR2
         register_address = self._get_register(pin)
-        self._setpwm(register_address, value)
+        self._setpwm(register_address, self.val_limit-value)
