@@ -33,14 +33,25 @@ class LedController:
     LedOp2 = 14
     addr_val = 64 # Address start from 65 so initial val set to 64 to get the value from user starting from 1
 
+    #Register addresses for mode 1, mode 2, en_on and en_off
+    REG_MODE1 = 0x00
+    REG_MODE2 = 0x01
+    REG_EN_ON_L = 0x06
+    REG_EN_ON_H = 0x07
+    REG_EN_OFF_L = 0x08
+    REG_EN_OFF_H = 0x09
+
     def __init__(self, addr, bus: I2cAbstraction, enable=True):
         self.addr = addr + self.addr_val
         self.bus = bus
         self._set_mode()
-        self.set_enable(enable)
+        # self.set_enable(enable)
 
     def _set_mode(self):
-        self.bus.i2c_writeto_mem(self.addr, 0x00, b'\x01')
+        # keep ALLCALL enabled, exit sleep
+        self.bus.i2c_writeto_mem(self.addr, self.REG_MODE1, b'\x01')
+        # invert output logic state, let outputs be push-pull
+        # self.bus.i2c_writeto_mem(self.addr, self.REG_MODE2, b'\x14')
 
     def setfreq(self, freq):
         """
@@ -58,16 +69,19 @@ class LedController:
         The function is used to enable or disable the LED Cell at a particular address.
         """
         if enable:
-            self.bus.i2c_writeto_mem(self.addr, 0x06, b'\x00')
-            self.bus.i2c_writeto_mem(self.addr, 0x07, b'\x10')
-            self.bus.i2c_writeto_mem(self.addr, 0x09, b'\x00')
-            self.bus.i2c_writeto_mem(self.addr, 0x08, b'\x00')
+            self.bus.i2c_writeto_mem(self.addr, self.REG_EN_ON_L, b'\x00')
+            self.bus.i2c_writeto_mem(self.addr, self.REG_EN_ON_H, b'\x10')  # <- something wrong here TODO
+            self.bus.i2c_writeto_mem(self.addr, self.REG_EN_OFF_L, b'\x00')
+            self.bus.i2c_writeto_mem(self.addr, self.REG_EN_OFF_H, b'\x00')
+
 
         else:
-            self.bus.i2c_writeto_mem(self.addr, 0x08, b'\x00')
-            self.bus.i2c_writeto_mem(self.addr, 0x09, b'\x00')
-            self.bus.i2c_writeto_mem(self.addr, 0x07, b'\x00')
-            self.bus.i2c_writeto_mem(self.addr, 0x06, b'\x00')
+            self.bus.i2c_writeto_mem(self.addr, self.REG_EN_ON_L, b'\x00')
+            self.bus.i2c_writeto_mem(self.addr, self.REG_EN_ON_H, b'\x00')
+            self.bus.i2c_writeto_mem(self.addr, self.REG_EN_OFF_L, b'\x00')
+            self.bus.i2c_writeto_mem(self.addr, self.REG_EN_OFF_H, b'\x00')
+
+
 
 
 class LedCell:
